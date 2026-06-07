@@ -1,7 +1,7 @@
 // ════════════════════════════════════════
 // 老翁 AI NPC — 填入你的 Gemini API Key
 // ════════════════════════════════════════
-const GEMINI_API_KEY = 'AQ.Ab8RN6KjQEY8Z0vCqK-Z5Af29c-pbbrmviFbAQVdmg0b2kvtvA';
+const GEMINI_API_KEY = '';
 const GEMINI_MODEL   = 'gemini-2.5-flash';
 
 // ── System Prompt（老翁角色設定 + 原文）──
