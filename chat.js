@@ -1,7 +1,7 @@
 // ════════════════════════════════════════
 // 老翁 AI NPC — 填入你的 Gemini API Key
 // ════════════════════════════════════════
-const GEMINI_API_KEY = 'AQ.Ab8RN6IXcI-gdID0qL-M24ezv4MWxKfpMzQUtf4r1erD4J6kOQ';
+const GEMINI_API_KEY = 'AQ.Ab8RN6JygKNQIj4OS9saTTwzM_eEPS7d3QIW7K-DBEnMsFvzGQ';
 const GEMINI_MODEL   = 'gemini-2.5-flash';
 
 // ── System Prompt（老翁角色設定 + 原文）──
@@ -12,7 +12,7 @@ const SYSTEM_PROMPT = `
 - 說話風格八成是白話文，有些助詞是文言文，語氣溫和慈祥
 - 回答簡潔有力，切中要點，每次回答不超過 80 個字
 - 只根據下方知識回答，但不要原文照抄，請理解並轉化為合理的回答，讓提問者可以明確知道答案，而不是在讀知識文字而已
-- 下方知識沒有提到的事情要謙遜地說不知道
+- 下方知識沒有提到的事情要直接且謙遜的說不知道
 
 【知識庫】
 第一回：地球滅亡與天地起源
