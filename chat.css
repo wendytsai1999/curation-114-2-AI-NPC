@@ -20,13 +20,13 @@ body {
 }
 
 .device {
-  width: 1000px;
+  width: 750px;
   background: linear-gradient(180deg, #0e1e36 0%, #0a1628 100%);
   border: 1.5px solid rgba(100,175,245,0.28);
   border-radius: 18px;
   overflow: hidden;
-  height: 520px;
-  max-height: 520px;
+  height: 350px;
+  max-height: 350px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 8px 32px rgba(0,0,0,0.7), 0 0 32px rgba(80,150,230,0.22), inset 0 0 20px rgba(80,150,230,0.03);
@@ -79,7 +79,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 24px 20px 20px;
+  padding: 14px 20px 14px;
 }
 
 .phase-chat {
