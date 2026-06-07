@@ -1,8 +1,8 @@
 // ════════════════════════════════════════
-// 老翁 AI NPC — 填入你的 Gemini API Key
+// 老翁 AI NPC — 填入你的 OpenAI API Key
 // ════════════════════════════════════════
-const GEMINI_API_KEY = 'AQ.Ab8RN6JygKNQIj4OS9saTTwzM_eEPS7d3QIW7K-DBEnMsFvzGQ';
-const GEMINI_MODEL   = 'gemini-2.5-flash';
+const OPENAI_API_KEY = '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';
+const OPENAI_MODEL   = 'gpt-4o-mini';
 
 // ── System Prompt（老翁角色設定 + 原文）──
 const SYSTEM_PROMPT = `
@@ -12,9 +12,9 @@ const SYSTEM_PROMPT = `
 - 說話風格八成是白話文，有些助詞是文言文，語氣溫和慈祥
 - 回答簡潔有力，切中要點，每次回答不超過 80 個字
 - 只根據下方知識回答，但不要原文照抄，請理解並轉化為合理的回答，讓提問者可以明確知道答案，而不是在讀知識文字而已
-- 下方知識沒有提到的事情要直接且謙遜的說不知道
+- 下方知識沒有提到的事情要謙遜地說不知道
 
-【知識】
+【知識庫】
 第一回：地球滅亡與天地起源
 老翁指著桌上一顆燃燒的火球說：「蝶生，你看，這就是地球。如今地力已盡，滅亡的時候到了，你若不信，拿這望遠鏡瞧瞧。」
 蝶生借了望遠鏡一看，只見各處火山爆裂、洪水氾濫、人類互相踐踏，就連搭氣球逃命的學者，因空氣稀薄而墜落焚燒，昔日繁華的巴黎、倫敦盡成廢墟，嚇得冷汗直流。
@@ -119,14 +119,14 @@ async function sendMessage() {
   // 加入對話歷史
   conversationHistory.push({
     role: 'user',
-    parts: [{ text }]
+    content: text
   });
 
   // 顯示打字動畫
   const typingRow = addTypingIndicator();
 
   try {
-    const reply = await callGemini();
+    const reply = await callOpenAI();
     typingRow.remove();
 
     // 逐字顯示老翁回覆
@@ -134,8 +134,8 @@ async function sendMessage() {
 
     // 加入對話歷史
     conversationHistory.push({
-      role: 'model',
-      parts: [{ text: reply }]
+      role: 'assistant',
+      content: reply
     });
 
   } catch (err) {
@@ -149,47 +149,43 @@ async function sendMessage() {
   input.focus();
 }
 
-// ── 呼叫 Gemini API（含自動重試 + fallback 模型）──
-const FALLBACK_MODEL = 'gemini-2.0-flash-lite';
-
-async function callGemini() {
-  const models = [GEMINI_MODEL, FALLBACK_MODEL];
-  for (const model of models) {
-    const result = await tryModel(model);
-    if (result !== null) return result;
-  }
-  throw new Error('所有模型均無法回應，請稍後再試。');
-}
-
-async function tryModel(model, retries = 3) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+// ── 呼叫 OpenAI API（含自動重試）──
+async function callOpenAI(retries = 3) {
+  const url = 'https://api.openai.com/v1/chat/completions';
+  const messages = [
+    { role: 'system', content: SYSTEM_PROMPT },
+    ...conversationHistory
+  ];
   const body = {
-    system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-    contents: conversationHistory,
-    generationConfig: { temperature: 0.8, maxOutputTokens: 1024 }
+    model: OPENAI_MODEL,
+    messages,
+    temperature: 0.8,
+    max_tokens: 1024
   };
 
   for (let attempt = 0; attempt < retries; attempt++) {
     const res = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
       body: JSON.stringify(body)
     });
 
     if (res.ok) {
       const data = await res.json();
-      return data.candidates[0].content.parts[0].text;
+      return data.choices[0].message.content;
     }
 
-    const err = await res.json();
     const isRetryable = res.status === 503 || res.status === 429;
     if (isRetryable && attempt < retries - 1) {
       await new Promise(r => setTimeout(r, 2000 * (attempt + 1)));
       continue;
     }
-    return null;
+    break;
   }
-  return null;
+  throw new Error('OpenAI 無法回應，請稍後再試。');
 }
 
 // ── UI 工具函式 ──
