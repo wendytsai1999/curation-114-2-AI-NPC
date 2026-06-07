@@ -194,6 +194,18 @@ async function tryModel(model, retries = 3) {
 
 // ── UI 工具函式 ──
 
+function createWengAvatar() {
+  const avatar = document.createElement('div');
+  avatar.className = 'bubble-avatar weng';
+  const img = document.createElement('img');
+  img.className = 'bubble-avatar-img';
+  img.src = 'oldman-白背景.png';
+  img.alt = '翁';
+  img.onerror = () => { img.style.display = 'none'; avatar.textContent = '翁'; };
+  avatar.appendChild(img);
+  return avatar;
+}
+
 function addUserBubble(text) {
   const area = document.getElementById('messagesArea');
   const row  = document.createElement('div');
@@ -211,17 +223,7 @@ function addBubble(type, sender, text) {
   const row    = document.createElement('div');
   row.className = 'bubble-row';
 
-  if (type === 'weng') {
-    const avatar = document.createElement('div');
-    avatar.className = 'bubble-avatar weng';
-    const img = document.createElement('img');
-    img.className = 'bubble-avatar-img';
-    img.src = 'oldman-白背景.png';
-    img.alt = '翁';
-    img.onerror = () => { img.style.display='none'; avatar.textContent='翁'; };
-    avatar.appendChild(img);
-    row.appendChild(avatar);
-  }
+  if (type === 'weng') row.appendChild(createWengAvatar());
 
   const bubble = document.createElement('div');
   bubble.className = 'bubble ' + type;
@@ -248,15 +250,7 @@ function addTypingIndicator() {
   const row    = document.createElement('div');
   row.className = 'bubble-row';
 
-  const avatar = document.createElement('div');
-  avatar.className = 'bubble-avatar weng';
-  const img = document.createElement('img');
-  img.className = 'bubble-avatar-img';
-  img.src = 'oldman-白背景.png';
-  img.alt = '翁';
-  img.onerror = () => { img.style.display='none'; avatar.textContent='翁'; };
-  avatar.appendChild(img);
-  row.appendChild(avatar);
+  row.appendChild(createWengAvatar());
 
   const bubble = document.createElement('div');
   bubble.className = 'bubble weng';
@@ -273,17 +267,7 @@ async function addBubbleTypewriter(type, sender, text) {
   const row    = document.createElement('div');
   row.className = 'bubble-row';
 
-  if (type === 'weng') {
-    const avatar = document.createElement('div');
-    avatar.className = 'bubble-avatar weng';
-    const img = document.createElement('img');
-    img.className = 'bubble-avatar-img';
-    img.src = 'oldman-白背景.png';
-    img.alt = '翁';
-    img.onerror = () => { img.style.display='none'; avatar.textContent='翁'; };
-    avatar.appendChild(img);
-    row.appendChild(avatar);
-  }
+  if (type === 'weng') row.appendChild(createWengAvatar());
 
   const bubble = document.createElement('div');
   bubble.className = 'bubble ' + type;
