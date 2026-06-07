@@ -1,7 +1,6 @@
 // ════════════════════════════════════════
 // 老翁 AI NPC — 填入你的 Gemini API Key
 // ════════════════════════════════════════
-const GEMINI_API_KEY = '';
 const GEMINI_MODEL   = 'gemini-2.5-flash';
 
 // ── System Prompt（老翁角色設定 + 原文）──
@@ -162,7 +161,7 @@ async function callGemini() {
 }
 
 async function tryModel(model, retries = 3) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+  const url = `https://old-sun-6780.115155009.workers.dev?model=${model}`;
   const body = {
     system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
     contents: conversationHistory,
